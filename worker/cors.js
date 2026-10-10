@@ -1,0 +1,3 @@
+const githubOrigin='https://websiteown88-dot.github.io';
+export function allowedOrigin(request){const origin=request.headers.get('origin');return origin===new URL(request.url).origin||origin===githubOrigin;}
+export function corsResponse(request,response){const origin=request.headers.get('origin');if(!allowedOrigin(request))return response;const headers=new Headers(response.headers);headers.set('Access-Control-Allow-Origin',origin);headers.set('Vary','Origin');headers.set('Access-Control-Allow-Methods','POST, OPTIONS');headers.set('Access-Control-Allow-Headers','Content-Type');headers.set('Access-Control-Max-Age','600');return new Response(response.body,{status:response.status,headers});}
