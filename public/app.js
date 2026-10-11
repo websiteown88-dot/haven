@@ -213,6 +213,9 @@ if (form) {
 
   const submit = document.querySelector('#submit-registration');
   const result = document.querySelector('#form-result');
+  const statusTray = document.querySelector('#registration-status');
+  const statusTitle = statusTray.querySelector('strong');
+  const statusDetail = statusTray.querySelector('small');
   const successDialog = document.querySelector('#registration-success');
   const nameField = form.querySelector('#name');
   const editableFields = form.querySelectorAll(
@@ -233,8 +236,8 @@ if (form) {
       icon: '',
       title: '送出中',
       message: '正在確認登記資料',
-      detail: '請稍候，不要關閉此頁面。',
-      confirm: '先關閉'
+      detail: '資料仍在傳送，可繼續瀏覽；完成前請勿關閉分頁。',
+      confirm: '返回網頁，繼續處理'
     },
     success: {
       icon: '✓',
@@ -272,6 +275,29 @@ if (form) {
       dialogConfirm.focus({ preventScroll: true });
     }
   }
+
+  function setStatusTray(state, title, detail) {
+    statusTray.dataset.state = state;
+    statusTitle.textContent = title;
+    statusDetail.textContent = detail;
+    statusTray.hidden = false;
+  }
+
+  statusTray.addEventListener('click', () => {
+    if (busy) {
+      openStatusDialog('pending');
+    } else if (completed) {
+      openStatusDialog('success');
+    } else {
+      openStatusDialog('error', result.textContent);
+    }
+  });
+
+  window.addEventListener('beforeunload', event => {
+    if (!busy) return;
+    event.preventDefault();
+    event.returnValue = '';
+  });
 
   document.querySelectorAll('a[href="#name"]').forEach(link => {
     link.addEventListener('click', e => {
@@ -323,9 +349,9 @@ if (form) {
     document.body.classList.remove('registration-modal-open');
 
     if (busy) {
-      submit.disabled = false;
-      submit.textContent = '查看送出狀態';
-      submit.focus({ preventScroll: true });
+      submit.disabled = true;
+      submit.textContent = '資料傳送中…';
+      statusTray.focus({ preventScroll: true });
     } else if (completed) {
       submit.disabled = false;
       submit.textContent = '查看登記結果';
@@ -397,8 +423,12 @@ if (form) {
     form.setAttribute('aria-busy', 'true');
     result.hidden = false;
     result.dataset.state = 'pending';
-    result.textContent = '正在送出，請稍候。';
-    openStatusDialog('pending');
+    result.textContent = '資料傳送中。你可以繼續瀏覽網站，完成前請勿關閉分頁。';
+    setStatusTray(
+      'pending',
+      '資料傳送中',
+      '請保持分頁開啟；點此查看狀態'
+    );
 
     try {
       const response = await fetch('/.netlify/functions/haven-register', {
@@ -442,6 +472,7 @@ if (form) {
         '登記成功！我們已收到你的資料，將由專人與你聯繫。登記不代表完成入會或保留優惠名額。';
 
       submit.textContent = '已完成登記';
+      statusTray.hidden = true;
       openStatusDialog('success');
     } catch (error) {
       window.dispatchEvent(
@@ -465,6 +496,7 @@ if (form) {
 
       submit.disabled = false;
       submit.textContent = '重新送出';
+      setStatusTray('error', '送出未完成', '資料已保留；點此查看並重試');
       openStatusDialog('error', result.textContent);
     } finally {
       busy = false;
