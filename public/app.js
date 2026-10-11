@@ -212,6 +212,33 @@ if (form) {
   const result = document.querySelector('#form-result');
   const successDialog = document.querySelector('#registration-success');
 
+  const registrationObserver = new IntersectionObserver(
+    ([entry]) => {
+      document.body.classList.toggle(
+        'registration-in-view',
+        entry.isIntersecting
+      );
+    },
+    {
+      threshold: 0.1,
+      rootMargin: '0px 0px -20% 0px'
+    }
+  );
+
+  registrationObserver.observe(document.querySelector('#visit'));
+
+  form.addEventListener('focusin', () => {
+    document.body.classList.add('registration-focused');
+  });
+
+  form.addEventListener('focusout', () => {
+    requestAnimationFrame(() => {
+      if (!form.contains(document.activeElement)) {
+        document.body.classList.remove('registration-focused');
+      }
+    });
+  });
+
   successDialog
     .querySelectorAll('.success-close,.success-confirm')
     .forEach(button => {
@@ -231,11 +258,15 @@ if (form) {
     const values = new FormData(form);
 
     const payload = Object.fromEntries(
-      ['name', 'contact', 'interest', 'time', 'note', 'website'].map(key => [
+      ['name', 'contact', 'note', 'website'].map(key => [
         key,
         String(values.get(key) || '').trim()
       ])
     );
+
+    // 這兩欄不再顯示；保留明確的「未指定」以相容既有後端與試算表欄位。
+    payload.interest = '未指定';
+    payload.time = '未指定';
 
     // 使用者點選送出，即同意表單上顯示的聯繫告知。
     payload.consent = true;
@@ -340,6 +371,12 @@ if (form) {
 
       if (!successDialog.open) {
         result.focus({ preventScroll: true });
+        result.scrollIntoView({
+          block: 'center',
+          behavior: matchMedia('(prefers-reduced-motion: reduce)').matches
+            ? 'auto'
+            : 'smooth'
+        });
       }
     }
   });
