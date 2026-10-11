@@ -100,35 +100,38 @@ if (window.gsap && window.ScrollTrigger) {
 
   const mm = gsap.matchMedia();
 
-  mm.add('(prefers-reduced-motion: no-preference)', () => {
-    gsap.utils.toArray('.reveal').forEach(el => {
-      gsap.from(el, {
-        opacity: 0,
-        y: 25,
-        filter: 'blur(4px)',
-        duration: 1.15,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 92%',
-          once: true
-        }
+  mm.add(
+    '(min-width:761px) and (prefers-reduced-motion: no-preference)',
+    () => {
+      gsap.utils.toArray('.reveal').forEach(el => {
+        gsap.from(el, {
+          opacity: 0,
+          y: 25,
+          filter: 'blur(4px)',
+          duration: 1.15,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 92%',
+            once: true
+          }
+        });
       });
-    });
 
-    gsap.utils.toArray('.mask').forEach(el => {
-      gsap.from(el, {
-        clipPath: 'inset(12% 0 12% 0)',
-        duration: 1.4,
-        ease: 'power2.out',
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 85%',
-          once: true
-        }
+      gsap.utils.toArray('.mask').forEach(el => {
+        gsap.from(el, {
+          clipPath: 'inset(12% 0 12% 0)',
+          duration: 1.4,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: el,
+            start: 'top 85%',
+            once: true
+          }
+        });
       });
-    });
-  });
+    }
+  );
 
   mm.add(
     '(min-width:1100px) and (prefers-reduced-motion: no-preference)',
@@ -264,9 +267,9 @@ if (form) {
       ])
     );
 
-    // 這兩欄不再顯示；保留明確的「未指定」以相容既有後端與試算表欄位。
-    payload.interest = '未指定';
-    payload.time = '未指定';
+    // 這兩欄不再顯示；送出既有後端接受的預設值以保留試算表欄位。
+    payload.interest = '早鳥預售優惠';
+    payload.time = '不限時段';
 
     // 使用者點選送出，即同意表單上顯示的聯繫告知。
     payload.consent = true;

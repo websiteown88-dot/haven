@@ -7,7 +7,7 @@ import {detectDevice} from './device-category.js';
   const ref=document.referrer?new URL(document.referrer):null;if(ref){const h=ref.hostname;source=ref.origin===location.origin?'internal':/(^|\.)facebook\.com$|(^|\.)fb\.com$/.test(h)?'facebook':/(^|\.)instagram\.com$/.test(h)?'instagram':/(^|\.)google\.[a-z.]+$/.test(h)?'google':/(^|\.)bing\.com$/.test(h)?'bing':'other'}
   const cached=JSON.parse(sessionStorage.getItem(key)||'null');if(cached&&cached.id&&Date.now()-cached.last<1800000){session=cached.id;source=cached.source;device=cached.device;seq=cached.seq||0}
  }catch{}
- let queue=[],sending=false,excluded=false,lastTick=performance.now(),lastInteraction=Date.now(),started=false,lastSection=null,candidate=null,candidateSeconds=0,openPhoto=null;
+ let queue=[],sending=false,excluded=false,lastTick=performance.now(),lastInteraction=Date.now(),saveTimer=0,started=false,lastSection=null,candidate=null,candidateSeconds=0,openPhoto=null;
  const dwell={},seenSections=new Set(),seenContent=new Set(),depths=new Set(),visibleSeconds=new Map();
  const sections=[...document.querySelectorAll('main section[id]')],cards=[...document.querySelectorAll('[data-analytics-content]')];
  function save(){try{sessionStorage.setItem(key,JSON.stringify({id:session,source,device,seq,last:lastInteraction}))}catch{}}
@@ -37,7 +37,9 @@ import {detectDevice} from './device-category.js';
   if(queue.length&&!excluded&&queue[0]?.id!==events[0]?.id)queueMicrotask(()=>flush());
  }
  function activity(){lastInteraction=Date.now();save()}
- ['pointerdown','keydown','scroll'].forEach(type=>addEventListener(type,activity,{passive:true}));
+ function scrollActivity(){lastInteraction=Date.now();if(!saveTimer)saveTimer=setTimeout(()=>{saveTimer=0;save()},1000)}
+ ['pointerdown','keydown'].forEach(type=>addEventListener(type,activity,{passive:true}));
+ addEventListener('scroll',scrollActivity,{passive:true});
  addEventListener('scroll',()=>{const total=document.documentElement.scrollHeight-innerHeight;if(total<=0)return;for(const depth of [25,50,75,100])if(scrollY/total*100>=(depth===100?98:depth)&&!depths.has(depth)){depths.add(depth);emit('scroll','other',0,depth)}},{passive:true});
  document.addEventListener('click',e=>{
   const content=e.target.closest('[data-analytics-content]');if(content){const t=content.dataset.analyticsContent;viewContent(t);emit('content_click',t);if(content.matches('.gallery-item'))openPhoto=t}
