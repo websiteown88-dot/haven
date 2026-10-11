@@ -214,6 +214,77 @@ if (form) {
   const submit = document.querySelector('#submit-registration');
   const result = document.querySelector('#form-result');
   const successDialog = document.querySelector('#registration-success');
+  const nameField = form.querySelector('#name');
+  const editableFields = form.querySelectorAll(
+    'input:not([name="website"]),textarea,select'
+  );
+  const dialogIcon = successDialog.querySelector('.success-check');
+  const dialogTitle = successDialog.querySelector(
+    '#registration-success-title'
+  );
+  const dialogMessage = successDialog.querySelector(
+    '#registration-success-message'
+  );
+  const dialogDetail = successDialog.querySelector('.success-detail');
+  const dialogConfirm = successDialog.querySelector('.success-confirm');
+
+  const dialogCopy = {
+    pending: {
+      icon: '',
+      title: '送出中',
+      message: '正在確認登記資料',
+      detail: '請稍候，不要關閉此頁面。',
+      confirm: '先關閉'
+    },
+    success: {
+      icon: '✓',
+      title: '登記完成',
+      message: '專人馬上為您服務',
+      detail: '感謝您的登記，請留意手機或 LINE 訊息。',
+      confirm: '好的，我知道了'
+    },
+    error: {
+      icon: '!',
+      title: '送出未完成',
+      message: '暫時無法確認登記結果',
+      detail: '您填寫的資料仍保留在表單中，可關閉後重新送出。',
+      confirm: '返回表單'
+    }
+  };
+
+  function setDialogState(state, message) {
+    const copy = dialogCopy[state];
+    successDialog.dataset.state = state;
+    dialogIcon.textContent = copy.icon;
+    dialogTitle.textContent = copy.title;
+    dialogMessage.textContent = message || copy.message;
+    dialogDetail.textContent = copy.detail;
+    dialogConfirm.textContent = copy.confirm;
+  }
+
+  function openStatusDialog(state, message) {
+    setDialogState(state, message);
+    document.body.classList.add('registration-modal-open');
+
+    if (!successDialog.open) successDialog.showModal();
+
+    if (state !== 'pending') {
+      dialogConfirm.focus({ preventScroll: true });
+    }
+  }
+
+  document.querySelectorAll('a[href="#name"]').forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      setMenu(false);
+      history.replaceState(null, '', '#name');
+
+      requestAnimationFrame(() => {
+        nameField.scrollIntoView({ block: 'center', behavior: 'auto' });
+        nameField.focus({ preventScroll: true });
+      });
+    });
+  });
 
   const registrationObserver = new IntersectionObserver(
     ([entry]) => {
@@ -250,13 +321,36 @@ if (form) {
 
   successDialog.addEventListener('close', () => {
     document.body.classList.remove('registration-modal-open');
-    result.focus({ preventScroll: true });
+
+    if (busy) {
+      submit.disabled = false;
+      submit.textContent = '查看送出狀態';
+      submit.focus({ preventScroll: true });
+    } else if (completed) {
+      submit.disabled = false;
+      submit.textContent = '查看登記結果';
+      submit.focus({ preventScroll: true });
+    } else {
+      result.focus({ preventScroll: true });
+    }
   });
 
   form.addEventListener('submit', async e => {
     e.preventDefault();
 
-    if (busy || completed || !form.reportValidity()) return;
+    if (busy) {
+      submit.disabled = true;
+      submit.textContent = '送出中…';
+      openStatusDialog('pending');
+      return;
+    }
+
+    if (completed) {
+      openStatusDialog('success');
+      return;
+    }
+
+    if (!form.reportValidity()) return;
 
     const values = new FormData(form);
 
@@ -295,12 +389,16 @@ if (form) {
     );
 
     busy = true;
+    editableFields.forEach(field => {
+      field.readOnly = true;
+    });
     submit.disabled = true;
     submit.textContent = '送出中…';
     form.setAttribute('aria-busy', 'true');
     result.hidden = false;
     result.dataset.state = 'pending';
     result.textContent = '正在送出，請稍候。';
+    openStatusDialog('pending');
 
     try {
       const response = await fetch('/.netlify/functions/haven-register', {
@@ -344,8 +442,7 @@ if (form) {
         '登記成功！我們已收到你的資料，將由專人與你聯繫。登記不代表完成入會或保留優惠名額。';
 
       submit.textContent = '已完成登記';
-      document.body.classList.add('registration-modal-open');
-      successDialog.showModal();
+      openStatusDialog('success');
     } catch (error) {
       window.dispatchEvent(
         new CustomEvent('haven:registration', {
@@ -368,8 +465,12 @@ if (form) {
 
       submit.disabled = false;
       submit.textContent = '重新送出';
+      openStatusDialog('error', result.textContent);
     } finally {
       busy = false;
+      editableFields.forEach(field => {
+        field.readOnly = false;
+      });
       form.removeAttribute('aria-busy');
 
       if (!successDialog.open) {
