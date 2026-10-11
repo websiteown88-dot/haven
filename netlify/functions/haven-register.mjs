@@ -1,16 +1,18 @@
 const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwQjyQLYf0Oo28J_xFxJSZwq-edVJTHkEvd6nAkrpIJAtg28GtsIpaTCVLt7qvx0PZq/exec';
 
-function reply(status, data) {
+function reply(status, data, headers = {}) {
   return new Response(JSON.stringify(data), {
     status,
     headers: {
       'Content-Type': 'application/json; charset=utf-8',
-      'Cache-Control': 'no-store'
+      'Cache-Control': 'no-store',
+      ...headers
     }
   });
 }
 
 export default async function handler(req) {
+  const requestStartedAt = Date.now();
   if (req.method !== 'POST') {
     return reply(405, {
       ok: false,
@@ -89,6 +91,8 @@ export default async function handler(req) {
     });
   }
 
+  const upstreamStartedAt = Date.now();
+
   try {
     const upstream = await fetch(SCRIPT_URL, {
       method: 'POST',
@@ -108,13 +112,24 @@ export default async function handler(req) {
     }
 
     const data = await upstream.json();
+    const upstreamMs = Date.now() - upstreamStartedAt;
+    const totalMs = Date.now() - requestStartedAt;
+    const timingHeaders = {
+      'Server-Timing': `apps-script;dur=${upstreamMs}, total;dur=${totalMs}`
+    };
 
     if (data.ok === true && data.requestId === payload.requestId) {
+      console.info(JSON.stringify({
+        event: 'haven_registration_timing',
+        outcome: data.duplicate === true ? 'duplicate' : 'saved',
+        upstreamMs,
+        totalMs
+      }));
       return reply(200, {
         ok: true,
         requestId: data.requestId,
         duplicate: data.duplicate === true
-      });
+      }, timingHeaders);
     }
 
     const errors = {
@@ -129,19 +144,35 @@ export default async function handler(req) {
 
     if (data.ok === false && Object.hasOwn(errors, data.code)) {
       const [status, message] = errors[data.code];
+      console.info(JSON.stringify({
+        event: 'haven_registration_timing',
+        outcome: data.code,
+        upstreamMs,
+        totalMs
+      }));
       return reply(status, {
         ok: false,
         code: data.code,
         message
-      });
+      }, timingHeaders);
     }
 
     throw new Error();
   } catch {
+    const upstreamMs = Date.now() - upstreamStartedAt;
+    const totalMs = Date.now() - requestStartedAt;
+    console.info(JSON.stringify({
+      event: 'haven_registration_timing',
+      outcome: 'SAVE_UNCONFIRMED',
+      upstreamMs,
+      totalMs
+    }));
     return reply(502, {
       ok: false,
       code: 'SAVE_UNCONFIRMED',
       message: '暫時無法確認是否完成，請保持頁面開啟並重新送出。'
+    }, {
+      'Server-Timing': `apps-script;dur=${upstreamMs}, total;dur=${totalMs}`
     });
   }
 }
