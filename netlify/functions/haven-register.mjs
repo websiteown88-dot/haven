@@ -34,10 +34,10 @@ export default async function handler(req) {
   }
 
   let payload;
-  let raw;
+  let upstreamBody;
 
   try {
-    raw = await req.text();
+    const raw = await req.text();
     if (raw.length > 12000) throw new Error();
 
     payload = JSON.parse(raw);
@@ -45,7 +45,6 @@ export default async function handler(req) {
     if (
       !payload ||
       Array.isArray(payload) ||
-      payload.consent !== true ||
       payload.website ||
       typeof payload.requestId !== 'string' ||
       !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(payload.requestId)
@@ -55,9 +54,7 @@ export default async function handler(req) {
 
     for (const [key, max] of [
       ['name', 60],
-      ['contact', 100],
-      ['interest', 30],
-      ['time', 40]
+      ['contact', 100]
     ]) {
       if (
         typeof payload[key] !== 'string' ||
@@ -67,10 +64,28 @@ export default async function handler(req) {
         throw new Error();
       }
     }
+
+    if (
+      payload.note !== undefined &&
+      (typeof payload.note !== 'string' || payload.note.length > 1000)
+    ) {
+      throw new Error();
+    }
+
+    upstreamBody = JSON.stringify({
+      name: payload.name.trim(),
+      contact: payload.contact.trim(),
+      interest: '早鳥預售優惠',
+      time: '不限時段',
+      note: String(payload.note || '').trim(),
+      website: '',
+      consent: true,
+      requestId: payload.requestId
+    });
   } catch {
     return reply(400, {
       ok: false,
-      message: '請確認必填資料並同意聯繫。'
+      message: '請確認姓名與手機或 LINE ID 已正確填寫。'
     });
   }
 
@@ -80,7 +95,7 @@ export default async function handler(req) {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: raw,
+      body: upstreamBody,
       redirect: 'follow',
       signal: AbortSignal.timeout(25000)
     });
@@ -103,7 +118,7 @@ export default async function handler(req) {
     }
 
     const errors = {
-      INVALID_INPUT: [400, '請確認必填資料並同意聯繫。'],
+      INVALID_INPUT: [400, '請確認姓名與手機或 LINE ID 已正確填寫。'],
       BUSY: [503, '目前忙碌，請保留資料稍後重試。'],
       RATE_LIMITED: [429, '同一聯絡資料送出過於頻繁，請稍後再試。'],
       SAVE_UNCONFIRMED: [
