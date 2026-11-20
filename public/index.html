@@ -7,7 +7,7 @@
 <meta name="description" content="HAVEN FITNESS 仁武館創始會員搶先登記：前 500 名入會費 0 元，創始會員月費方案登記者優先取得。">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600&family=Noto+Serif+TC:wght@600;700&family=Noto+Sans+TC:wght@400;500;700;900&family=Oswald:wght@500;700&display=swap" rel="stylesheet">
 <!-- Meta Pixel：把 YOUR_PIXEL_ID 換成你們的 Pixel 編號後取消註解。送出成功時會自動觸發 Lead 事件。
 <script>
 !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
@@ -42,25 +42,63 @@ a { color: inherit; }
 :focus-visible { outline: 2px solid var(--rattan); outline-offset: 3px; }
 .wrap { max-width: 1080px; margin: 0 auto; padding-inline: var(--gutter); }
 
-/* 首屏 */
-.hero { position: relative; min-height: min(92vh, 820px); display: grid; align-items: end; overflow: hidden; }
-.hero > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 60%; }
-.hero::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,15,11,.55) 0%, rgba(20,15,11,.25) 30%, rgba(20,15,11,.82) 70%, var(--bg) 100%); }
-.hero-in { position: relative; z-index: 1; padding-block: 28px 40px; width: 100%; }
-.logo { position: absolute; top: 22px; left: var(--gutter); z-index: 2; font-family: var(--display); font-weight: 600; letter-spacing: .3em; font-size: 17px; }
-.loc { font-size: 13px; letter-spacing: .18em; color: var(--rattan); margin: 0 0 10px; }
-h1 { font-family: var(--serif-tc); font-weight: 700; font-size: clamp(40px, 10vw, 76px); line-height: 1.12; margin: 0 0 18px; letter-spacing: .02em; }
-h1 .h-num { font-family: var(--display); font-variant-numeric: lining-nums; color: var(--rattan); font-size: 1.15em; font-weight: 600; }
-h1 small { display: block; font-size: .42em; font-weight: 600; letter-spacing: .12em; color: var(--ink-2); margin-bottom: 8px; }
+/* 首屏：健身房氛圍。深色、粗體無襯線、3F 訓練區實景、器材跑馬燈 */
+.hero { position: relative; overflow: hidden; background: radial-gradient(120% 80% at 85% 20%, #3a2a1a 0%, #17120d 55%, #0e0b08 100%); isolation: isolate; }
+.hero::before { content: ''; position: absolute; inset: 0; z-index: -1; opacity: .5; background-image: repeating-linear-gradient(115deg, rgba(196,154,94,.05) 0 1px, transparent 1px 28px); }
+.hero-bar { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; padding: 18px var(--gutter); }
+.logo { display: flex; align-items: center; gap: 10px; font-family: 'Oswald', var(--sans); font-weight: 700; letter-spacing: .28em; font-size: 17px; }
+.logo img { width: 34px; height: 34px; object-fit: contain; }
+.logo span small { display: block; font-size: 9px; letter-spacing: .5em; color: var(--rattan); font-weight: 500; margin-top: 2px; }
+.open-tag { font: 500 12px/1 'Oswald', var(--sans); letter-spacing: .2em; color: var(--rattan); border: 1px solid var(--line); padding: 8px 12px; border-radius: 999px; }
+.open-tag::before { content: ''; display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--rattan); margin-right: 8px; vertical-align: 1px; box-shadow: 0 0 0 0 rgba(196,154,94,.6); animation: pulse 2s infinite; }
+@keyframes pulse { 70% { box-shadow: 0 0 0 8px rgba(196,154,94,0); } 100% { box-shadow: 0 0 0 0 rgba(196,154,94,0); } }
+.hero-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: clamp(24px, 4vw, 56px); align-items: center; padding: clamp(12px, 3vw, 36px) var(--gutter) clamp(36px, 5vw, 64px); max-width: 1280px; margin: 0 auto; position: relative; }
+.hero-copy { position: relative; z-index: 2; }
+.watermark { position: absolute; z-index: -1; left: calc(var(--gutter) - .06em); top: 50%; transform: translateY(-58%); font: 700 clamp(120px, 19vw, 280px)/.8 'Oswald', sans-serif; letter-spacing: -.01em; color: transparent; -webkit-text-stroke: 1px rgba(196,154,94,.13); pointer-events: none; user-select: none; white-space: nowrap; }
+.loc { font: 500 13px/1.4 'Oswald', var(--sans); letter-spacing: .22em; color: var(--rattan); margin: 0 0 14px; display: flex; align-items: center; gap: 10px; }
+.loc::before { content: ''; width: 28px; height: 2px; background: var(--rattan); }
+h1 { font-family: var(--sans); font-weight: 900; font-size: clamp(38px, 5.4vw, 72px); line-height: 1.08; margin: 0 0 20px; letter-spacing: .01em; }
+h1 .h-num { font-family: 'Oswald', var(--sans); font-weight: 700; color: var(--rattan); font-size: 1.18em; letter-spacing: 0; }
+h1 .nw { white-space: nowrap; }
+h1 small { display: block; font-size: .3em; font-weight: 700; letter-spacing: .24em; color: var(--ink-2); margin-bottom: 12px; }
+.hero-media { position: relative; z-index: 1; display: grid; gap: 12px; }
+.hero-media figure { margin: 0; position: relative; overflow: hidden; border-radius: 4px; box-shadow: 0 30px 60px -20px rgba(0,0,0,.7); }
+.hero-media img { width: 100%; height: 100%; object-fit: cover; filter: contrast(1.08) saturate(.92) brightness(.95); }
+.hero-media .m1 { aspect-ratio: 459 / 230; }
+.hero-media .m1 img { transform-origin: 60% 50%; animation: kbimg 18s ease-in-out infinite alternate; }
+.hero-media .m2 { width: 78%; justify-self: end; margin-top: -56px; aspect-ratio: 459 / 196; border: 3px solid #17120d; }
+.hero-media figcaption { position: absolute; left: 12px; bottom: 10px; font: 500 11px/1 'Oswald', var(--sans); letter-spacing: .18em; color: #fff; background: rgba(14,11,8,.7); padding: 6px 9px; border-left: 2px solid var(--rattan); }
+.hero-media figure::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,11,8,0) 50%, rgba(14,11,8,.55)); pointer-events: none; }
+@keyframes kbimg { from { transform: scale(1); } to { transform: scale(1.08); } }
+.stats { display: flex; gap: clamp(18px, 3vw, 34px); margin: 22px 0 0; padding: 0; list-style: none; }
+.stats li { font-size: 12px; color: var(--ink-2); line-height: 1.3; }
+.stats b { display: block; font: 700 clamp(24px, 3vw, 30px)/1 'Oswald', var(--sans); color: var(--ink); margin-bottom: 4px; }
+.ticker { position: relative; z-index: 2; overflow: hidden; background: var(--rattan); color: #17120d; transform: skewY(-1.2deg); margin-bottom: -8px; }
+.ticker-track { display: flex; width: max-content; animation: tick 28s linear infinite; }
+.ticker span { font: 700 15px/1 'Oswald', var(--sans); letter-spacing: .14em; padding: 13px 0; white-space: nowrap; }
+.ticker span i { font-style: normal; margin: 0 18px; opacity: .55; }
+@keyframes tick { to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .ticker-track, .hero-media .m1 img, .open-tag::before { animation: none; } }
+@media (max-width: 820px) {
+  .hero-grid { grid-template-columns: minmax(0, 1fr); padding-top: 0; gap: 22px; }
+  .hero-media { order: -1; margin-inline: calc(var(--gutter) * -1); }
+  .hero-media figure { border-radius: 0; box-shadow: none; }
+  .hero-media .m1 { aspect-ratio: 459 / 250; }
+  .hero-media .m1::after { background: linear-gradient(180deg, rgba(14,11,8,.15) 40%, #15100c 100%); }
+  .hero-media .m2 { display: none; }
+  .hero-media figcaption { bottom: auto; top: 12px; left: var(--gutter); }
+  .watermark { top: 0; transform: none; font-size: 30vw; left: var(--gutter); }
+  .open-tag { font-size: 11px; padding: 7px 10px; }
+}
 .offer { display: grid; gap: 10px; margin: 0 0 22px; max-width: 560px; }
 .offer .big { font-family: var(--serif-tc); font-size: clamp(22px, 5.4vw, 32px); font-weight: 700; line-height: 1.35; }
-.offer .big b { font-variant-numeric: lining-nums; color: var(--rattan); font-size: 1.35em; font-family: var(--display); font-weight: 600; padding-inline: 2px; }
+.offer .big b { font-variant-numeric: lining-nums; color: var(--rattan); font-size: 1.35em; font-family: 'Oswald', var(--sans); font-weight: 700; padding-inline: 2px; }
 .offer .tease { font-size: clamp(16px, 4vw, 20px); color: var(--ink); }
 .offer .tease .num { font-family: var(--display); font-variant-numeric: lining-nums; font-size: 1.5em; font-weight: 600; color: var(--rattan); padding-inline: 2px; }
 .offer .tease s { color: var(--ink-2); text-decoration-thickness: 2px; }
 .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 54px; padding: 0 30px; border: 0; border-radius: 4px; background: var(--cta); color: #1d1712; font: 700 17px/1 var(--sans); letter-spacing: .08em; text-decoration: none; cursor: pointer; }
 .btn:hover { filter: brightness(1.07); }
-.hero .btn { width: min(100%, 360px); }
+.hero .btn { width: min(100%, 360px); box-shadow: 0 10px 30px -8px rgba(196,154,94,.55); }
 .hero .sub { font-size: 13px; color: var(--ink-2); margin: 12px 0 0; }
 
 /* 佐證 */
@@ -157,41 +195,206 @@ h2 { font-family: var(--serif-tc); font-weight: 700; font-size: clamp(24px, 5.6v
 .sticky .t b { font-variant-numeric: lining-nums; color: var(--rattan); }
 .sticky .btn { min-height: 46px; padding: 0 20px; font-size: 15px; white-space: nowrap; }
 body.at-form .sticky { transform: translateY(110%); }
+
+/* ===== v2：轉換元件 ===== */
+/* 待確認標記：只在預覽模式顯示，正式上架前把 HAVEN.preview 改成 false */
+.tbc { display: none; }
+body.preview .tbc { display: inline-block; font: 700 11px/1 var(--sans); letter-spacing: .04em; color: #fff; background: #c0392b; padding: 3px 6px; border-radius: 3px; margin-left: 6px; vertical-align: 2px; white-space: nowrap; }
+/* 名額＋倒數 */
+.urgency { display: grid; gap: 12px; max-width: 460px; margin: 0 0 18px; }
+.quota-top { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: var(--ink-2); margin-bottom: 6px; }
+.quota-top b { font: 700 18px/1 'Oswald', var(--sans); color: var(--ink); }
+.quota-top .left b { color: var(--rattan); }
+.bar { height: 8px; background: rgba(255,255,255,.08); border-radius: 99px; overflow: hidden; }
+.bar i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, #a87c42, var(--rattan) 70%, #e4c48f); border-radius: inherit; transition: width 1.2s cubic-bezier(.2,.8,.2,1); }
+.countdown { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: 13px; color: var(--ink-2); }
+.cd-cells { display: flex; gap: 6px; }
+.cd-cells span { min-width: 46px; text-align: center; background: rgba(255,255,255,.06); border: 1px solid var(--line); border-radius: 4px; padding: 5px 4px 4px; font-size: 10px; line-height: 1.2; color: var(--ink-2); }
+.cd-cells b { display: block; font: 700 20px/1 'Oswald', var(--sans); color: var(--ink); }
+/* 首屏快速登記 */
+.quick { background: rgba(243,236,224,.06); border: 1px solid var(--line); border-radius: 6px; padding: 14px; max-width: 460px; backdrop-filter: blur(4px); }
+.quick-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 8px; margin-bottom: 8px; }
+.quick input { width: 100%; height: 50px; border-radius: 4px; border: 1px solid rgba(243,236,224,.25); background: rgba(14,11,8,.55); color: var(--ink); font: 16px var(--sans); padding: 0 14px; }
+.quick input::placeholder { color: #8f8270; }
+.quick input:focus { outline: 2px solid var(--rattan); outline-offset: 0; border-color: var(--rattan); }
+.quick .btn { width: 100%; }
+.quick .gift { font-size: 13px; color: var(--ink); margin: 0 0 10px; }
+.quick .gift b { color: var(--rattan); }
+.quick .consent { color: var(--ink-2); font-size: 11px; margin: 8px 0 0; }
+.quick .msg[data-state="error"] { background: rgba(192,57,43,.18); color: #f3c2b8; }
+.quick .msg[data-state="pending"] { background: rgba(255,255,255,.06); color: var(--ink-2); }
+.quick-done { text-align: center; padding: 10px 4px; }
+.quick-done b { display: block; font-size: 20px; margin-bottom: 4px; color: var(--rattan); }
+.quick-done p { margin: 0; font-size: 14px; color: var(--ink-2); }
+@media (max-width: 420px) { .quick-row { grid-template-columns: minmax(0, 1fr); } }
+/* 在 HAVEN 的一天 */
+.day { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(250px, 31%); gap: 14px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 10px; scrollbar-width: thin; scrollbar-color: var(--rattan) transparent; }
+.day li { list-style: none; scroll-snap-align: start; background: var(--bg-2); border: 1px solid var(--line); display: grid; grid-template-rows: auto 1fr; }
+.day figure { margin: 0; aspect-ratio: 4 / 3.4; overflow: hidden; position: relative; }
+.day img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
+.day li:hover img { transform: scale(1.04); }
+.day .step { position: absolute; top: 10px; left: 10px; font: 700 12px/1 'Oswald', var(--sans); letter-spacing: .16em; background: rgba(14,11,8,.75); color: var(--rattan); padding: 6px 9px; }
+.day .txt { padding: 14px 16px 18px; }
+.day .txt small { display: block; font: 500 11px/1 'Oswald', var(--sans); letter-spacing: .22em; color: var(--rattan); margin-bottom: 6px; }
+.day .txt b { display: block; font-family: var(--serif-tc); font-size: 19px; margin-bottom: 4px; }
+.day .txt p { margin: 0; font-size: 14px; color: var(--ink-2); line-height: 1.6; }
+.day { padding-left: 0; margin: 0; }
+@media (max-width: 720px) { .day { grid-auto-columns: 78%; } }
+.day-hint { font-size: 12px; color: var(--ink-2); margin: 4px 0 0; }
+/* 段落後的登記按鈕 */
+.cta-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-top: 22px; padding: 16px 18px; border: 1px solid var(--line); border-left: 3px solid var(--rattan); background: linear-gradient(90deg, rgba(196,154,94,.12), rgba(196,154,94,0)); }
+.cta-row p { margin: 0; font-size: 15px; }
+.cta-row p b { color: var(--rattan); font-family: 'Oswald', var(--sans); font-size: 1.2em; }
+.cta-row .btn { min-height: 46px; padding: 0 22px; font-size: 15px; }
+@media (max-width: 520px) { .cta-row .btn { width: 100%; } }
+/* FAQ */
+.faq { border-top: 1px solid var(--line); }
+.faq details { border-bottom: 1px solid var(--line); }
+.faq summary { list-style: none; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 18px 2px; font-size: 16px; font-weight: 700; }
+.faq summary::-webkit-details-marker { display: none; }
+.faq summary::after { content: '+'; font: 500 24px/1 'Oswald', var(--sans); color: var(--rattan); transition: transform .2s; flex: none; }
+.faq details[open] summary::after { transform: rotate(45deg); }
+.faq details p { margin: -4px 0 18px; color: var(--ink-2); font-size: 15px; padding-right: 30px; }
+/* 權益 4 欄 */
+.perks.four { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+@media (max-width: 900px) and (min-width: 721px) { .perks.four { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 720px) { .perks.four { grid-template-columns: minmax(0, 1fr); } }
+.form-card .urgency { margin: 0 0 20px; max-width: none; }
+.form-card .quota-top { color: #7d6e60; }
+.form-card .quota-top b { color: var(--ink-dark); }
+.form-card .quota-top .left b { color: #a4662f; }
+.form-card .bar { background: #e2d8c7; }
+.form-card .countdown { color: #7d6e60; }
+.form-card .cd-cells span { background: #fff; border-color: #d6cbb9; color: #7d6e60; }
+.form-card .cd-cells b { color: var(--ink-dark); }
+
+/* ===== 峇里島抽獎 ===== */
+.bali { position: relative; margin-top: clamp(48px, 9vw, 88px); padding: clamp(56px, 9vw, 110px) 0 clamp(40px, 6vw, 72px); overflow: hidden; isolation: isolate; }
+.bali > img { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; }
+.bali::before { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, var(--bg) 0%, rgba(29,23,18,.25) 22%, rgba(29,23,18,.15) 45%, rgba(29,23,18,.88) 78%, var(--bg) 100%); }
+.bali-head { text-align: center; text-shadow: 0 2px 18px rgba(0,0,0,.55); }
+.bali-head .tag { display: inline-block; font: 700 13px/1 var(--sans); letter-spacing: .2em; color: #1d1712; background: linear-gradient(90deg, #e4c48f, var(--rattan)); padding: 9px 16px; border-radius: 999px; text-shadow: none; }
+.bali-head h2 { font-family: var(--serif-tc); font-size: clamp(40px, 9vw, 84px); line-height: 1.1; margin: 16px 0 6px; letter-spacing: .06em; }
+.bali-head h2 em { display: block; font: italic 600 clamp(18px, 3vw, 26px)/1 var(--display); letter-spacing: .3em; color: #f3dcb0; margin-bottom: 8px; }
+.bali-head p { margin: 0; font-size: clamp(16px, 3.6vw, 20px); font-weight: 700; }
+.bali-head p b { color: #f3dcb0; font-family: 'Oswald', var(--sans); font-size: 1.2em; }
+.prizes { margin: clamp(110px, 20vw, 220px) auto 0; max-width: 920px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; list-style: none; padding: 0; }
+.prizes li { display: grid; grid-template-columns: 58px minmax(0, 1fr) auto; align-items: center; gap: 12px; background: rgba(29,23,18,.82); backdrop-filter: blur(6px); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px; }
+.prizes .rank { font-family: var(--serif-tc); font-weight: 700; font-size: 18px; color: var(--rattan); }
+.prizes .what { font-size: 16px; font-weight: 700; line-height: 1.4; }
+.prizes .what small { display: block; font-weight: 400; font-size: 12px; color: var(--ink-2); }
+.prizes .what b { font-family: 'Oswald', var(--sans); font-weight: 700; font-size: 1.15em; color: #f3dcb0; }
+.prizes .qty { font-size: 13px; color: var(--ink-2); white-space: nowrap; }
+.prizes li.top { grid-column: 1 / -1; background: linear-gradient(90deg, rgba(196,154,94,.95), rgba(228,196,143,.92)); color: #1d1712; border: 0; padding: 18px 20px; }
+.prizes li.top .rank, .prizes li.top .qty, .prizes li.top .what small { color: #3b2b1b; }
+.prizes li.top .what { font-size: clamp(18px, 4vw, 24px); }
+.bali-foot { text-align: center; margin-top: 18px; }
+.bali-foot .note { margin: 0 0 16px; }
+.bali-foot .btn { width: min(100%, 360px); box-shadow: 0 10px 30px -8px rgba(196,154,94,.55); }
+.credit { position: absolute; right: 8px; bottom: 6px; font-size: 10px; color: rgba(239,230,214,.45); }
+.credit a { color: inherit; }
+@media (max-width: 640px) { .prizes { grid-template-columns: minmax(0, 1fr); } .prizes li { grid-template-columns: 48px minmax(0, 1fr) auto; padding: 12px 14px; } }
 </style>
 <script>!function(w,d,s,u){if(w.oaiq)return;var q=function(){q.q.push(arguments)};q.q=[];w.oaiq=q;var j=d.createElement(s);j.async=1;j.src=u;var f=d.getElementsByTagName(s)[0];f.parentNode.insertBefore(j,f)}(window,document,"script","https://bzrcdn.openai.com/sdk/oaiq.min.js");oaiq("init",{pixelId:"VkiBtvZJRAHFvdasxp6Cwg",debug:true});</script>
 </head>
 <body>
 
 <header class="hero">
-  <img src="images/hero-lounge.jpg" alt="HAVEN 2F 庭園洽談區設計示意" width="1397" height="1172" fetchpriority="high">
-  <div class="logo">HAVEN</div>
-  <div class="hero-in wrap">
-    <p class="loc">高雄仁武 ｜ 峇里島風健身俱樂部</p>
-    <h1><small>HAVEN FITNESS 創始會員</small>搶先登記<br>月費不到 <span class="h-num">999</span> 元</h1>
-    <div class="offer">
-      <div class="big">前 <b>500</b> 名 入會費 <b>0</b> 元</div>
-      <!-- 價格懸念：有確定數字後改成例如「創始會員月費不到 <s>1,500</s> 元？」 -->
-    </div>
-    <a class="btn" href="#signup">立即搶先登記</a>
-    <p class="sub">30 秒填完 · 專人以電話或 LINE 聯繫</p>
+  <div class="hero-bar">
+    <div class="logo"><img src="assets/haven-logo-transparent.png" alt="" width="34" height="34"><span>HAVEN<small>FITNESS</small></span></div>
+    <span class="open-tag">PRESALE OPEN</span>
   </div>
+  <div class="hero-grid">
+    <div class="watermark" aria-hidden="true">TRAIN</div>
+    <div class="hero-media">
+      <figure class="m1"><img src="images/3f-strength.jpg" alt="HAVEN 3F 重量訓練區設計示意" width="459" height="205" fetchpriority="high"><figcaption>3F STRENGTH ZONE</figcaption></figure>
+      <figure class="m2"><img src="images/3f-cardio.jpg" alt="HAVEN 3F 有氧訓練區設計示意" width="459" height="196"><figcaption>3F CARDIO ZONE</figcaption></figure>
+    </div>
+    <div class="hero-copy">
+      <p class="loc">高雄仁武 ｜ 峇里島風健身俱樂部</p>
+      <h1><small>HAVEN FITNESS 創始會員</small>搶先登記<br><span class="nw">月費不到 <span class="h-num">999</span> 元</span></h1>
+      <div class="offer">
+        <div class="big">前 <b>500</b> 名 入會費 <b>0</b> 元</div>
+        <!-- 價格懸念：有確定數字後改成例如「創始會員月費不到 <s>1,500</s> 元？」 -->
+      </div>
+      <div class="urgency" data-urgency>
+        <div class="quota">
+          <div class="quota-top"><span>創始名額 <b data-quota>500</b> 名</span><span class="left">剩 <b data-left>—</b> 名</span></div>
+          <div class="bar" role="progressbar" aria-label="已登記比例" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-fill></i></div>
+        </div>
+        <div class="countdown" data-countdown hidden><span>早鳥截止</span>
+          <div class="cd-cells"><span><b data-d>0</b>天</span><span><b data-h>00</b>時</span><span><b data-m>00</b>分</span><span><b data-s>00</b>秒</span></div>
+        </div>
+      </div>
+      <div class="quick" id="quick">
+        <form id="quick-form" novalidate data-source="首屏快速登記">
+          <p class="gift" data-gift-wrap>🎁 <b data-gift>入會成為創始會員，抽峇里島兩人同行</b> <a href="#bali" style="color:var(--ink-2);font-size:12px">看獎項 →</a></p>
+          <div class="quick-row">
+            <label class="hp" for="q-name">姓名</label><input id="q-name" name="name" autocomplete="name" required maxlength="60" placeholder="姓名">
+            <label class="hp" for="q-contact">手機</label><input id="q-contact" name="contact" type="tel" inputmode="tel" autocomplete="tel" required maxlength="100" placeholder="手機號碼">
+          </div>
+          <div class="hp" aria-hidden="true"><input name="website" tabindex="-1" autocomplete="off"></div>
+          <button class="btn" type="submit">立即搶先登記・30 秒完成</button>
+          <p class="msg" hidden></p>
+          <p class="consent">送出即表示同意 HAVEN FITNESS 使用以上資料，僅用於創始會員方案說明與聯繫。</p>
+        </form>
+        <div class="quick-done" data-done hidden role="status"><b>✓ 登記完成</b><p>專人會以電話或 LINE 與你聯繫，說明創始會員方案。</p></div>
+      </div>
+      <ul class="stats">
+        <li><b>3F</b>整層訓練區</li>
+        <li><b>3</b>國際器材品牌</li>
+        <li><b>5</b>大訓練類型</li>
+      </ul>
+    </div>
+  </div>
+  <div class="ticker" aria-hidden="true"><div class="ticker-track">
+    <span>自由訓練<i>/</i>FREE WEIGHTS<i>/</i>私人教練<i>/</i>PERSONAL TRAINING<i>/</i>團體課程<i>/</i>GROUP CLASS<i>/</i>瑜珈・皮拉提斯<i>/</i>功能訓練<i>/</i>FUNCTIONAL<i>/</i></span>
+    <span>自由訓練<i>/</i>FREE WEIGHTS<i>/</i>私人教練<i>/</i>PERSONAL TRAINING<i>/</i>團體課程<i>/</i>GROUP CLASS<i>/</i>瑜珈・皮拉提斯<i>/</i>功能訓練<i>/</i>FUNCTIONAL<i>/</i></span>
+  </div></div>
 </header>
 
 <main>
 
-  <section class="wrap" aria-labelledby="why">
-    <p class="eyebrow">2F The Haven</p>
-    <h2 id="why">2F 峇里島度假會館</h2>
-    <div class="tiles" aria-label="2F 空間設計示意">
-      <figure class="shot"><img src="images/lounge-pavilions.jpg" alt="雕花木涼亭洽談區" width="1468" height="1116" loading="lazy"><figcaption><b>庭園洽談區</b><span>雕花涼亭與佛塔水景</span></figcaption></figure>
-      <figure class="shot"><img src="images/reception.jpg" alt="藤編接待櫃台與木雕背牆" width="1327" height="1234" loading="lazy"><figcaption><b>接待大廳</b><span>藤編櫃台與手工木雕</span></figcaption></figure>
-      <figure class="shot wide"><img src="images/group-class.jpg" alt="靜謐暖木質感團體教室：木地板、鏡面牆與竹簾落地窗" width="1800" height="1013" loading="lazy"><figcaption><b>靜謐暖木質感團體教室</b><span>木樑間接光、整面鏡牆與竹簾落地窗</span></figcaption></figure>
-      <figure class="shot"><img src="images/pilates-1.jpg" alt="皮拉提斯教室" width="1091" height="1501" loading="lazy"><figcaption><b>皮拉提斯教室</b><span>木樑天花與面窗配置</span></figcaption></figure>
-      <figure class="shot"><img src="images/vanity.jpg" alt="石盆洗手台與梳妝區" width="1406" height="1164" loading="lazy"><figcaption><b>洗手梳妝區</b><span>天然石盆與藤編櫃</span></figcaption></figure>
-      <figure class="shot"><img src="images/shower.jpg" alt="石材淋浴間" width="1044" height="1567" loading="lazy"><figcaption><b>淋浴間</b><span>石材牆面與古銅五金</span></figcaption></figure>
-      <figure class="shot"><img src="images/lockers.jpg" alt="木紋置物櫃" width="1647" height="994" loading="lazy"><figcaption><b>置物櫃區</b><span>整排木紋置物櫃</span></figcaption></figure>
+  <section class="bali" id="bali" aria-labelledby="balititle">
+    <img src="https://images.unsplash.com/photo-1591624197700-6fc997314981?auto=format&fit=crop&w=1800&q=75" srcset="https://images.unsplash.com/photo-1591624197700-6fc997314981?auto=format&fit=crop&w=800&q=70 800w, https://images.unsplash.com/photo-1591624197700-6fc997314981?auto=format&fit=crop&w=1800&q=75 1800w" sizes="100vw" alt="峇里島烏魯瓦圖斷崖夕陽" loading="lazy">
+    <div class="wrap">
+      <div class="bali-head">
+        <span class="tag">創始會員限定</span>
+        <h2 id="balititle"><em>BALI TRIP</em>峇里島之旅</h2>
+        <p>總禮品超過 <b>10</b> 萬元</p>
+      </div>
+      <ol class="prizes">
+        <li class="top"><span class="rank">頭獎</span><span class="what">峇里島兩人同行<small>一人獲獎，可帶一位同行</small></span><span class="qty">1 份</span></li>
+        <li><span class="rank">貳獎</span><span class="what">現金 NT$<b>8,888</b></span><span class="qty">1 份</span></li>
+        <li><span class="rank">參獎</span><span class="what">現金 NT$<b>6,888</b></span><span class="qty">1 份</span></li>
+        <li><span class="rank">肆獎</span><span class="what">現金 NT$<b>3,888</b></span><span class="qty">1 份</span></li>
+        <li><span class="rank">伍獎</span><span class="what">ALL IN 乳清一箱</span><span class="qty">1 份</span></li>
+        <li><span class="rank">陸獎</span><span class="what">現金 NT$<b>1,000</b></span><span class="qty">共 5 份</span></li>
+      </ol>
+      <div class="bali-foot">
+        <p class="note">完成入會的創始會員即具抽獎資格（僅登記未入會者不列入）。開獎日期將另行公告。</p>
+        <a class="btn" href="#signup">立即登記・搶創始會員資格</a>
+      </div>
     </div>
+    <span class="credit">Photo: <a href="https://unsplash.com/photos/eFtb2SDBPaY" target="_blank" rel="noopener">Francesco La Corte / Unsplash</a></span>
+  </section>
+
+  <section class="wrap" id="day" aria-labelledby="why">
+    <p class="eyebrow">A Day at HAVEN</p>
+    <h2 id="why">在 HAVEN 的一天<br><span style="font-size:.62em;color:var(--ink-2);font-weight:600">2F 峇里島度假會館 ＋ 3F 整層訓練區</span></h2>
+    <ol class="day" aria-label="空間設計示意">
+      <li><figure><img src="images/reception.jpg" alt="藤編接待櫃台與木雕背牆" width="1327" height="1234" loading="lazy"><span class="step">01</span></figure><div class="txt"><small>ARRIVE</small><b>抵達・接待大廳</b><p>藤編櫃台與手工木雕，一走進來就換一種節奏。</p></div></li>
+      <li><figure><img src="images/lockers.jpg" alt="木紋置物櫃" width="1647" height="994" loading="lazy"><span class="step">02</span></figure><div class="txt"><small>CHANGE</small><b>換裝・置物櫃區</b><p>整排木紋置物櫃，放下包包，準備開練。</p></div></li>
+      <li><figure><img src="images/3f-strength.jpg" alt="3F 重量訓練區" width="459" height="205" loading="lazy"><span class="step">03</span></figure><div class="txt"><small>TRAIN</small><b>訓練・3F 整層器材區</b><p>有氧、插銷式與槓片式器械、啞鈴區，一整層留給訓練。</p></div></li>
+      <li><figure><img src="images/group-class.jpg" alt="團體教室" width="1800" height="1013" loading="lazy"><span class="step">04</span></figure><div class="txt"><small>MOVE</small><b>上課・團體教室</b><p>木樑間接光、整面鏡牆與竹簾落地窗，跟著教練一起動。</p></div></li>
+      <li><figure><img src="images/pilates-1.jpg" alt="皮拉提斯教室" width="1091" height="1501" loading="lazy"><span class="step">05</span></figure><div class="txt"><small>STRETCH</small><b>伸展・皮拉提斯教室</b><p>木樑天花與面窗配置，核心與柔軟度在這裡慢慢練。</p></div></li>
+      <li><figure><img src="images/shower.jpg" alt="石材淋浴間" width="1044" height="1567" loading="lazy"><span class="step">06</span></figure><div class="txt"><small>RESTORE</small><b>沐浴・淋浴間</b><p>石材牆面與古銅五金，練完好好沖個澡。</p></div></li>
+      <li><figure><img src="images/vanity.jpg" alt="石盆洗手台與梳妝區" width="1406" height="1164" loading="lazy"><span class="step">07</span></figure><div class="txt"><small>REFRESH</small><b>整理・洗手梳妝區</b><p>天然石盆與藤編櫃，整理好再出門。</p></div></li>
+      <li><figure><img src="images/hero-lounge.jpg" alt="2F 庭園洽談區" width="1397" height="1172" loading="lazy"><span class="step">08</span></figure><div class="txt"><small>UNWIND</small><b>放鬆・庭園洽談區</b><p>雕花涼亭與佛塔水景，訓練後坐下來喘口氣。</p></div></li>
+    </ol>
+    <p class="day-hint">← 左右滑動看完整動線 →</p>
     <p class="note">空間設計示意圖，實際配置以正式公告為準。</p>
+    <div class="cta-row"><p>喜歡這樣的空間？前 <b>500</b> 名入會費 <b>0</b> 元</p><a class="btn" href="#signup">搶先登記</a></div>
   </section>
 
   <section class="wrap gear" aria-labelledby="gear">
@@ -208,24 +411,49 @@ body.at-form .sticky { transform: translateY(110%); }
       <figure class="brand-card"><div class="logo-box"><img src="images/brand-3.jpg" alt="NEWTECH 標誌" width="626" height="644" loading="lazy"></div><figcaption><b>NEWTECH</b><p>專注肌力訓練設備，產品涵蓋掛片式器械、滑輪系統與自由重量，提供多元的重量訓練選擇。</p></figcaption></figure>
     </div>
     <p class="note">空間設計示意圖，器材外型與配置僅供參考，實際品牌型號以確認清單為準。</p>
+    <div class="cta-row"><p>國際品牌器材＋整層訓練區，月費不到 <b>999</b> 元</p><a class="btn" href="#signup">搶先登記</a></div>
   </section>
 
   <section class="wrap" aria-labelledby="perks">
     <p class="eyebrow">Founding Member</p>
     <h2 id="perks">創始會員登記內容</h2>
-    <ul class="perks">
+    <ul class="perks four">
       <li><div class="k">0 元</div><strong>入會費全免</strong><p>前 500 名登記者適用。</p></li>
-      <li><div class="k">優先</div><strong>創始月費方案</strong><p>正式公開前，先由專人說明創始會員方案。</p></li>
+      <li><div class="k">999</div><strong>創始月費方案</strong><p>月費不到 999 元，正式公開前由專人先說明。</p></li>
+      <li data-gift-wrap><div class="k">抽</div><strong>峇里島抽獎</strong><p data-gift>入會成為創始會員，抽峇里島兩人同行</p></li>
       <li><div class="k">現場</div><strong>預售中心參觀</strong><p>每天 10:00–22:00，仁武區中華路 15 號。</p></li>
     </ul>
+    <div class="cta-row"><p>入會費 <b>0</b> 元只限前 <b>500</b> 名，額滿為止</p><a class="btn" href="#signup">搶先登記</a></div>
+  </section>
+
+  <section class="wrap" id="faq" aria-labelledby="faqtitle">
+    <p class="eyebrow">FAQ</p>
+    <h2 id="faqtitle">常見問題</h2>
+    <div class="faq">
+      <details open><summary><span>登記要付錢嗎？會被綁約嗎？</span></summary><p>登記只需要留下姓名和手機，不需付款。專人說明創始會員方案後，你再決定要不要入會。</p></details>
+      <details><summary><span>創始會員月費多少？</span></summary><p>創始會員月費不到 999 元，詳細方案內容由專人說明。</p></details>
+      <details><summary><span>入會費怎麼算？</span></summary><p>前 500 名登記者入會費 0 元。</p></details>
+      <details><summary><span>可以先去現場看看嗎？</span></summary><p>可以。預售中心在高雄市仁武區中華路 15 號，每天 10:00–22:00 開放。</p></details>
+      <details><summary><span>有哪些設施與課程？</span></summary><p>3F 整層訓練區（有氧訓練區、重量訓練區），2F 團體教室、皮拉提斯教室、淋浴間、梳妝區與置物櫃。服務包含自由訓練、私人教練、團體課程、瑜珈／皮拉提斯與功能訓練。</p></details>
+    </div>
+    <div class="cta-row"><p>還有問題？登記後專人一對一說明</p><a class="btn" href="#signup">搶先登記</a></div>
   </section>
 
   <section class="wrap" id="signup" aria-labelledby="formtitle">
     <div class="form-card">
       <div id="form-area">
         <h2 id="formtitle">搶先登記</h2>
-        <p class="lead">留下聯絡方式，專人會說明創始會員方案。</p>
-        <form id="booking-form" novalidate>
+        <p class="lead">留下聯絡方式，專人會說明創始會員方案。<span data-gift-wrap><br>🎁 <b data-gift>入會成為創始會員，抽峇里島兩人同行</b></span></p>
+        <div class="urgency" data-urgency>
+          <div class="quota">
+            <div class="quota-top"><span>創始名額 <b data-quota>500</b> 名</span><span class="left">剩 <b data-left>—</b> 名</span></div>
+            <div class="bar" role="progressbar" aria-label="已登記比例" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><i data-fill></i></div>
+          </div>
+          <div class="countdown" data-countdown hidden><span>早鳥截止</span>
+            <div class="cd-cells"><span><b data-d>0</b>天</span><span><b data-h>00</b>時</span><span><b data-m>00</b>分</span><span><b data-s>00</b>秒</span></div>
+          </div>
+        </div>
+        <form id="booking-form" novalidate data-source="創始會員登記頁">
           <div class="field"><label for="name">姓名<i>*</i></label><input id="name" name="name" autocomplete="name" required maxlength="60" placeholder="怎麼稱呼你？"></div>
           <div class="field"><label for="contact">手機<i>*</i></label><input id="contact" name="contact" type="text" autocomplete="off" autocapitalize="none" spellcheck="false" enterkeyhint="done" required maxlength="100" placeholder="請填寫手機號碼"></div>
           <div class="field"><label for="age">年齡區間<em>非必填</em></label>
@@ -233,7 +461,7 @@ body.at-form .sticky { transform: translateY(110%); }
           <div class="hp" aria-hidden="true"><label for="website">Website</label><input id="website" name="website" tabindex="-1" autocomplete="off"></div>
           <button class="btn" type="submit" id="f-submit">立即搶先登記</button>
           <p class="consent">送出即表示同意 HAVEN FITNESS 使用以上資料，僅用於本次方案說明與聯繫。如需更正或刪除，可洽 Facebook 粉絲專頁。</p>
-          <p class="msg" id="f-msg" hidden></p>
+          <p class="msg" hidden></p>
         </form>
       </div>
       <div class="done" id="done" hidden role="status">
@@ -260,43 +488,96 @@ body.at-form .sticky { transform: translateY(110%); }
 </div>
 
 <script>
+// ===== 網站設定：改這裡就好 =====
+const HAVEN = {
+  preview: false,                        // 預覽模式：顯示紅色「待確認」標籤。正式上架前改成 false
+  quota: 500,                            // 創始名額
+  registered: null,                      // 目前已登記人數（不公開）。設成 null 會隱藏「剩幾名」與進度條
+  deadline: '',                          // 早鳥截止時間（不顯示）。設成 '' 不顯示倒數
+  gift: '入會成為創始會員，抽峇里島兩人同行'               // 登記禮。設成 '' 不顯示
+};
 (() => {
   const ENDPOINT = '/.netlify/functions/haven-register';
-  const form = document.getElementById('booking-form'), msg = document.getElementById('f-msg'), btn = document.getElementById('f-submit');
-  let requestId = null, lastSig = null, busy = false;
-  const show = (state, text) => { msg.hidden = false; msg.dataset.state = state; msg.textContent = text; };
+  if (HAVEN.preview) document.body.classList.add('preview');
+
+  // 登記禮
+  document.querySelectorAll('[data-gift-wrap]').forEach(el => { if (!HAVEN.gift) el.hidden = true; });
+  document.querySelectorAll('[data-gift]').forEach(el => { el.textContent = HAVEN.gift; });
+
+  // 名額進度
+  document.querySelectorAll('[data-urgency]').forEach(box => {
+    box.querySelector('[data-quota]').textContent = HAVEN.quota;
+    const quota = box.querySelector('.quota'), left = box.querySelector('[data-left]'), fill = box.querySelector('[data-fill]');
+    if (HAVEN.registered == null) { quota.hidden = true; return; }
+    const n = Math.min(HAVEN.registered, HAVEN.quota), pct = Math.round(n / HAVEN.quota * 100);
+    left.textContent = HAVEN.quota - n;
+    fill.parentElement.setAttribute('aria-valuenow', pct);
+    requestAnimationFrame(() => setTimeout(() => { fill.style.width = Math.max(pct, 4) + '%'; }, 150));
+  });
+
+  // 倒數
+  const end = HAVEN.deadline ? new Date(HAVEN.deadline).getTime() : NaN;
+  const cds = [...document.querySelectorAll('[data-countdown]')];
+  if (!isNaN(end) && end > Date.now()) {
+    cds.forEach(c => c.hidden = false);
+    const pad = n => String(n).padStart(2, '0');
+    const tick = () => {
+      const t = Math.max(0, end - Date.now()), d = Math.floor(t / 864e5), h = Math.floor(t / 36e5) % 24, m = Math.floor(t / 6e4) % 60, sec = Math.floor(t / 1e3) % 60;
+      cds.forEach(c => { c.querySelector('[data-d]').textContent = d; c.querySelector('[data-h]').textContent = pad(h); c.querySelector('[data-m]').textContent = pad(m); c.querySelector('[data-s]').textContent = pad(sec); });
+      if (t <= 0) { cds.forEach(c => c.hidden = true); clearInterval(timer); }
+    };
+    tick(); const timer = setInterval(tick, 1000);
+  }
+
+  document.querySelectorAll('[data-urgency]').forEach(box => { if ([...box.children].every(c => c.hidden)) box.hidden = true; });
 
   // 表單出現在畫面時，收起底部固定按鈕
-  if ('IntersectionObserver' in window) new IntersectionObserver(([e]) => document.body.classList.toggle('at-form', e.isIntersecting), { threshold: .15 }).observe(document.getElementById('signup'));
+  if ('IntersectionObserver' in window) {
+    const seen = new Map();
+    const io = new IntersectionObserver(es => { es.forEach(e => seen.set(e.target, e.isIntersecting)); document.body.classList.toggle('at-form', [...seen.values()].some(Boolean)); }, { threshold: .15 });
+    io.observe(document.getElementById('signup')); io.observe(document.getElementById('quick'));
+  }
 
-  form.addEventListener('submit', async e => {
-    e.preventDefault();
-    if (busy) return;
-    const v = Object.fromEntries(new FormData(form).entries());
-    const name = (v.name || '').trim(), contact = (v.contact || '').trim();
-    if (!name) { show('error', '請填寫姓名。'); document.getElementById('name').focus(); return; }
-    if (!contact) { show('error', '請填寫手機。'); document.getElementById('contact').focus(); return; }
-    const noteParts = ['來源：創始會員登記頁']; if (v.age) noteParts.push('年齡：' + v.age);
-    const payload = { name, contact, note: noteParts.join('｜'), website: v.website || '', interest: '早鳥預售優惠', time: '不限時段', consent: true };
-    if (!crypto.randomUUID) { show('error', '目前瀏覽器無法建立安全的登記編號，請更新瀏覽器後再試。'); return; }
-    const sig = JSON.stringify(payload); if (sig !== lastSig) { requestId = crypto.randomUUID(); lastSig = sig; }
-    window.dispatchEvent(new CustomEvent('haven:registration', { detail: 'form_submit' }));
-    busy = true; btn.disabled = true; btn.textContent = '送出中…'; show('pending', '資料傳送中，請稍候。');
-    try {
-      const res = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...payload, requestId }), signal: AbortSignal.timeout(35000) });
-      if (!(res.headers.get('content-type') || '').includes('application/json')) throw new Error('登記服務暫時無法連線，請稍後再試。');
-      const data = await res.json();
-      if (!res.ok || data.ok !== true || data.requestId !== requestId) throw new Error(data.message || '暫時無法確認登記結果，請稍後再試。');
-      if (window.fbq) fbq('track', 'Lead', { content_name: '創始會員登記' });
-      window.dispatchEvent(new CustomEvent('haven:registration', { detail: 'form_success' }));
-      document.getElementById('form-area').hidden = true;
-      const done = document.getElementById('done'); done.hidden = false;
-      document.getElementById('sticky').hidden = true;
-    } catch (err) {
-      window.dispatchEvent(new CustomEvent('haven:registration', { detail: 'form_error' }));
-      show('error', (err.name === 'TimeoutError' ? '連線逾時。' : err.message) + ' 你填的資料還在，可以直接再按一次送出。');
-      btn.disabled = false; btn.textContent = '立即搶先登記';
-    } finally { busy = false; }
+  // 兩張表單共用送出邏輯
+  let completed = false;
+  const markDone = () => {
+    completed = true;
+    document.getElementById('form-area').hidden = true; document.getElementById('done').hidden = false;
+    document.getElementById('quick-form').hidden = true; document.querySelector('#quick [data-done]').hidden = false;
+    document.getElementById('sticky').hidden = true;
+  };
+  document.querySelectorAll('#booking-form, #quick-form').forEach(form => {
+    const msg = form.querySelector('.msg'), btn = form.querySelector('button[type=submit]'), label = btn.textContent;
+    const nameEl = form.querySelector('[name=name]'), contactEl = form.querySelector('[name=contact]');
+    let requestId = null, lastSig = null, busy = false;
+    const show = (state, text) => { msg.hidden = false; msg.dataset.state = state; msg.textContent = text; };
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      if (busy || completed) return;
+      const v = Object.fromEntries(new FormData(form).entries());
+      const name = (v.name || '').trim(), contact = (v.contact || '').trim();
+      if (!name) { show('error', '請填寫姓名。'); nameEl.focus(); return; }
+      if (!contact) { show('error', '請填寫手機。'); contactEl.focus(); return; }
+      const noteParts = ['來源：' + form.dataset.source]; if (v.age) noteParts.push('年齡：' + v.age);
+      const payload = { name, contact, note: noteParts.join('｜'), website: v.website || '', interest: '早鳥預售優惠', time: '不限時段', consent: true };
+      if (!crypto.randomUUID) { show('error', '目前瀏覽器無法建立安全的登記編號，請更新瀏覽器後再試。'); return; }
+      const sig = JSON.stringify(payload); if (sig !== lastSig) { requestId = crypto.randomUUID(); lastSig = sig; }
+      window.dispatchEvent(new CustomEvent('haven:registration', { detail: 'form_submit' }));
+      busy = true; btn.disabled = true; btn.textContent = '送出中…'; show('pending', '資料傳送中，請稍候。');
+      try {
+        const res = await fetch(ENDPOINT, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...payload, requestId }), signal: AbortSignal.timeout(35000) });
+        if (!(res.headers.get('content-type') || '').includes('application/json')) throw new Error('登記服務暫時無法連線，請稍後再試。');
+        const data = await res.json();
+        if (!res.ok || data.ok !== true || data.requestId !== requestId) throw new Error(data.message || '暫時無法確認登記結果，請稍後再試。');
+        if (window.fbq) fbq('track', 'Lead', { content_name: '創始會員登記' });
+        window.dispatchEvent(new CustomEvent('haven:registration', { detail: 'form_success' }));
+        markDone();
+      } catch (err) {
+        window.dispatchEvent(new CustomEvent('haven:registration', { detail: 'form_error' }));
+        show('error', (err.name === 'TimeoutError' ? '連線逾時。' : err.message) + ' 你填的資料還在，可以直接再按一次送出。');
+        btn.disabled = false; btn.textContent = label;
+      } finally { busy = false; }
+    });
   });
 })();
 </script>
